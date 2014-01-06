@@ -1,0 +1,14 @@
+/* CSS declarations go here */
+body {
+  background: url(/images/main-background.png) repeat;
+}
+
+#header-bar {
+  background-color: #127899;
+  margin-bottom: 20px;
+}
+
+#header-bar img {
+  width: 12%;
+  min-width: 120px;
+}

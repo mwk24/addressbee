@@ -1,0 +1,31 @@
+<head>
+  <title>addressbee</title>
+  <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.15.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+  {{> header}}
+  {{yield}}
+</body>
+
+<template name='header'>
+  <header class="container-fluid" id="header-bar">
+    <img src="/images/beelogo1.png" class="center-block img-responsive logo-img" />
+  </header>
+
+  <button id='fbLogin'>Login with Fb</button>
+  <button id='normalLogin'>Login with email</button>
+
+
+</template>
+
+<template name='user'>
+  USER
+</template>
+
+<template name='addAddress'>
+  <div class='container-fluid'>
+    {{> addressForm}}
+  </div>
+</template>
