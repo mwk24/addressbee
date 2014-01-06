@@ -9,6 +9,11 @@ if (Meteor.isClient) {
     }
   });
 
+  Template.addressBook.addresses = function() {
+    return Meteor.users.findOne(Meteor.userId()).addresses;
+  };
+
+  // Login tools
   Template.header.events({
     'click #fbLogin' : function() {
       Meteor.loginWithFacebook({ requestPermissions: ['email']},
@@ -26,24 +31,47 @@ if (Meteor.isClient) {
             return console.log(error);
         }
       });
+    },
+    'click #logout' : function() {
+      Meteor.logout();
     }
   });
 
   // Form helpers
   Template.dayOptions.days = _.range(1,31);
   Template.monthOptions.months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+  Meteor.startup(function() {
+    //Meteor.subscribe('addresses'); // TESTING
+    Meteor.subscribe('userData');
+  })
 }
 
 
 if (Meteor.isServer) {
 
- Meteor.users.allow({
-    'update': function (userId,doc) {
+  // Permissions
+  Meteor.publish("userData", function () {
+    return Meteor.users.find(
+      {_id: this.userId},
+      {fields: {'addresses': 1}});
+  });
+
+  Meteor.users.allow({
+    'update': function(userId, doc) {
       if (userId == Meteor.user()._id) {
         return true; 
       }
     }
   });
+
+  Addresses.allow({
+    'insert' : function(userId, doc) {
+      return true;
+    }
+  });
+
+  //Meteor.publish('addresses', function() { return Addresses.find() }); // TESTING
 
   Meteor.startup(function () {
     
@@ -66,19 +94,20 @@ var submitAddressForm = function(formEl) {
   });
 
   // Save address
+  console.log('new address:', obj);
   var address_id = Addresses.insert(obj);
 
   // Add to addressbook of logged-in user
   if (Meteor.user()) {
-    Meteor.users.update({_id:Meteor.user()._id}, {$addToSet:{addresses: address_id}});
+    Meteor.users.update({_id:Meteor.user()._id}, {$addToSet:{addresses: obj}});
   }
 };
 
 
 Router.map(function() {
-  this.route('userPage', {
-    path: '/u/:userName',
-    template: 'user'
+  this.route('addressBook', {
+    path: '/book',
+    template: 'addressBook'
   });
 
   this.route('addAddress', {

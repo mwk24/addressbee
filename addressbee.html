@@ -14,14 +14,25 @@
     <img src="/images/beelogo1.png" class="center-block img-responsive logo-img" />
   </header>
 
-  <button id='fbLogin'>Login with Fb</button>
-  <button id='normalLogin'>Login with email</button>
-
+  {{#if currentUser}}
+    Hi, {{currentUser.profile.name}} <button class='btn btn-default' id='logout'>Logout</button>
+  {{else}}
+    <button class='btn btn-default' id='fbLogin'>Login with Fb</button>
+    <button class='btn btn-default' id='normalLogin'>Login with email</button>
+  {{/if}}
 
 </template>
 
-<template name='user'>
-  USER
+<template name='addressBook'>
+  <div class='container-fluid'>
+    <table class='table table-bordered'>
+    {{#each addresses}}
+      <tr>
+        <td>Name - {{name}}</td>
+      </tr>
+    {{/each}}
+    </table>
+  </div>
 </template>
 
 <template name='addAddress'>
